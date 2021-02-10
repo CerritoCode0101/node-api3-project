@@ -1,7 +1,7 @@
 const express = require("express");
 const usrModel = require("./users-model");
 const router = express.Router();
-const {validateUserId, validateUser} = require('../middleware/middleware')
+const { validateUserId, validateUser } = require("../middleware/middleware");
 
 router.get("/", (req, res) => {
   usrModel
@@ -24,7 +24,7 @@ router.get("/:id", validateUserId, (req, res) => {
   // this needs a middleware to verify user id
 });
 
-router.post("/",validateUser, (req, res) => {
+router.post("/", validateUser, (req, res) => {
   const user = req.body;
   usrModel
     .insert(user)
@@ -36,29 +36,41 @@ router.post("/",validateUser, (req, res) => {
   // this needs a middleware to check that the request body is valid
 });
 
-router.put("/:id",validateUserId, validateUser,(req, res) => {
+router.put("/:id", validateUserId, validateUser, (req, res) => {
   const idVar = req.params.id;
   const changes = req.body;
-  usrModel.update(idVar, changes).then(changes => {
-    res.status(200).json({message: `The user at id: ${changes.id} has been updated!`})
-  }).catch(err => {
-    console.log("SERVER ERROR", err)
-    res.status(500).json({message: 'Error updating the user'})
-  })
+  usrModel
+    .update(idVar, changes)
+    .then((changes) => {
+      res
+        .status(200)
+        .json({ message: `The user at id: ${changes.id} has been updated!` });
+    })
+    .catch((err) => {
+      console.log("SERVER ERROR", err);
+      res.status(500).json({ message: "Error updating the user" });
+    });
 
   // RETURN THE FRESHLY UPDATED USER OBJECT
   // this needs a middleware to verify user id
   // and another middleware to check that the request body is valid
 });
 
-router.delete("/:id",validateUserId, (req, res) => {
+router.delete("/:id", validateUserId, (req, res) => {
   const idVar = req.params.id;
-  usrModel.remove(idVar).then( id => {
-    res.status(200).json({message: `The user at id: ${idVar} has been Deleted!`})
-  }).catch(err => {
-    console.log("SERVER ERROR",err)
-    res.status(500).json({message: `The user at id: ${idVar} could not be deleted..` })
-  })
+  usrModel
+    .remove(idVar)
+    .then((id) => {
+      res
+        .status(200)
+        .json({ message: `The user at id: ${idVar} has been Deleted!` });
+    })
+    .catch((err) => {
+      console.log("SERVER ERROR", err);
+      res
+        .status(500)
+        .json({ message: `The user at id: ${idVar} could not be deleted..` });
+    });
   // RETURN THE FRESHLY DELETED USER OBJECT
   // this needs a middleware to verify user id
 });

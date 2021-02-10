@@ -1,26 +1,32 @@
-const usrModel = require('../users/users-model')
+const usrModel = require("../users/users-model");
 
 const logger = (req, res, next) => {
   console.log(
-    ` On [${new Date().toISOString()}] a new ${req.method} request was made to ${req.url}`
+    ` On [${new Date().toISOString()}] a new ${
+      req.method
+    } request was made to ${req.url}`
   );
   next();
 };
 
 const validateUserId = (req, res, next) => {
   const { id } = req.params;
-  usrModel.getById(id).then(user => {
-    if(!user) {
-      res.status(400).json({message: `No user with the id: ${id} was found.`})
-    }else {
-      req.user = user
-      next();
-    }
-  }).catch(err => {
-    console.log("Server Error",err)
-    res.status(500).json({message: 'Server Error'})
-  })
-
+  usrModel
+    .getById(id)
+    .then((user) => {
+      if (!user) {
+        res
+          .status(400)
+          .json({ message: `No user with the id: ${id} was found.` });
+      } else {
+        req.user = user;
+        next();
+      }
+    })
+    .catch((err) => {
+      console.log("Server Error", err);
+      res.status(500).json({ message: "Server Error" });
+    });
 };
 
 const validateUser = (req, res, next) => {
