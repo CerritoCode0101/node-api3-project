@@ -9,7 +9,7 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-server.listen(port, () =>{
+app.listen(port, () =>{
     console.log(`\n* Server Running on http://localhost${port} *\n`)
 })
 
